@@ -97,7 +97,7 @@ public class Server{
 
                 }
                 catch(Exception e) {
-                    callback.accept("OOOOPPs...Something wrong with the socket from client: " + count + "....closing down!");
+                    callback.accept("Client " + count + " went offline!");
                     updateClients("Client #"+count+" has left the server!");
                     clients.remove(this);
                     break;

@@ -1,7 +1,6 @@
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -9,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -45,10 +43,16 @@ public class TheGameOfMorra extends Application {
 		ImageView bigLogo1 = new ImageView(new Image("logo.png", 100, 100, true, true));
 		bigLogo1.setRotate(45);
 
-		ImageView bigLogo2 = new ImageView(new Image("logo.png", 50, 50, true, true));
-		bigLogo2.setRotate(135);
+		ImageView bigLogo2 = new ImageView(new Image("logo.png", 66, 66, true, true));
+		bigLogo2.setRotate(90);
 
-		StackPane logo = new StackPane(bigLogo1, bigLogo2);
+		ImageView bigLogo3 = new ImageView(new Image("logo.png", 33, 33, true, true));
+		bigLogo3.setRotate(135);
+
+		ImageView bigLogo4 = new ImageView(new Image("logo.png", 66, 66, true, true));
+		bigLogo2.setRotate(225);
+
+		HBox logo = new HBox(7, bigLogo3, bigLogo2, bigLogo1, bigLogo4);
 
 		ImageView connect = new ImageView(new Image("connect.png", 25, 25, true, true));
 		connect.setFitWidth(25);
@@ -67,28 +71,45 @@ public class TheGameOfMorra extends Application {
 
 		launch.setOnAction(e -> {
 
+			ImageView smallLogo1 = new ImageView(new Image("logo.png", 45, 45, true, true));
+			ImageView smallLogo2 = new ImageView(new Image("logo.png", 35, 35, true, true));
+			ImageView smallLogo3 = new ImageView(new Image("logo.png", 25, 25, true, true));
+			ImageView smallLogo4 = new ImageView(new Image("logo.png", 15, 15, true, true));
+
+			smallLogo1.setRotate(45);
+			smallLogo2.setRotate(90);
+			smallLogo3.setRotate(135);
+			smallLogo4.setRotate(225);
+
+			VBox smallLogo = new VBox(10, smallLogo1, smallLogo2, smallLogo3, smallLogo4);
+
 			listItems = new ListView<String>();
 
-			Text p1ScoreBox = new Text("Points: null");
-			Text p1PlaysBox = new Text("Plays: null");
-			Text p1GuessBox = new Text("Guess: null");
-			VBox p1Area = new VBox(10, new Text("PLAYER 1"), p1ScoreBox, p1PlaysBox, p1GuessBox);
+			TextField p1PointField = new TextField();
+			TextField p2PointField = new TextField();
 
-			Text p2ScoreBox = new Text("Points: null");
-			Text p2PlaysBox = new Text("Plays: null");
-			Text p2GuessBox = new Text("Guess: null");
-			VBox p2Area = new VBox(10, new Text("PLAYER 2"), p2ScoreBox, p2PlaysBox, p2GuessBox);
+			p1PointField.setDisable(true);
+			p2PointField.setDisable(true);
 
-			int port = Integer.parseInt(portField.getText());
-			portField.setDisable(true);
+			HBox p1ScoreBox = new HBox(20, new Text("Points :"), p1PointField);
+			VBox p1Area = new VBox(10, new Text("PLAYER 1"), p1ScoreBox);
 
-			listItems.getItems().add("Server listens on port " + port + "!\nWaiting for 2 players...");
+			HBox p2ScoreBox = new HBox(20, new Text("Points :"), p2PointField);
+			VBox p2Area = new VBox(10, new Text("PLAYER 2"), p2ScoreBox);
+
+
+			int portNum = Integer.parseInt(portField.getText());
+
+			listItems.getItems().add("Server listens on port " + portNum + "!\nWaiting for 2 players...");
+
 			serverConnection = new Server(data -> {
-				Platform.runLater (() -> {
-					listItems.getItems().add(data.toString());
-				}); }, port);
+				Platform.runLater (() -> listItems.getItems().add(data.toString())
+				); }, portNum);
 
-			primaryStage.setScene(new Scene(new HBox(20, listItems, new VBox(50, p1Area, p2Area)),600,400));
+			HBox layoutBox = new HBox(20, smallLogo, listItems, new VBox(50, p1Area, p2Area));
+			layoutBox.setPadding(new Insets(10));
+
+			primaryStage.setScene(new Scene(layoutBox,600,400));
 
 		});
 
