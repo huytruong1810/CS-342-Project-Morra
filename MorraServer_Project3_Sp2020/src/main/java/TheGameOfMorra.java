@@ -23,8 +23,8 @@ public class TheGameOfMorra extends Application {
 	ListView<String> listItems;
 	Server serverConnection;
 	int p1Points, p2Points;
-	String p1Plays, p2Plays;
-	String p1Guess, p2Guess;
+	int p1Plays, p2Plays;
+	int p1Guess, p2Guess;
 	int numPlayers;
 
 	public static void main(String[] args) {
@@ -103,7 +103,25 @@ public class TheGameOfMorra extends Application {
 			listItems.getItems().add("Server listens on port " + portNum + "!\nWaiting for 2 players...");
 
 			serverConnection = new Server(data -> {
-				Platform.runLater (() -> listItems.getItems().add(data.toString())
+				Platform.runLater (() -> {
+
+					p1Plays = data.p1Plays;
+					p2Plays = data.p2Plays;
+					p1Guess = data.p1Guess;
+					p2Guess = data.p2Guess;
+					listItems.getItems().add("Player 1 choose : " + p1Plays);
+					listItems.getItems().add("Player 1 guess : " + p1Guess);
+					listItems.getItems().add("Player 2 choose : " + p2Plays);
+					listItems.getItems().add("Player 2 guess : " + p2Guess);
+					listItems.getItems().add(evaluate());
+					if (p1Points == 2) {
+						listItems.getItems().add("Player 1 has 2 points!\nPlayer 1 wins! Game concluded!");
+					}
+					else if (p2Points == 2) {
+						listItems.getItems().add("Player 2 has 2 points!\nPlayer 2 wins! Game concluded!");
+					}
+
+				}
 				); }, portNum);
 
 			HBox layoutBox = new HBox(20, smallLogo, listItems, new VBox(50, p1Area, p2Area));
@@ -120,6 +138,31 @@ public class TheGameOfMorra extends Application {
 		// START SCENE
 		primaryStage.setScene(new Scene(portBox, 300, 275));
 		primaryStage.show();
+
+	}
+
+	private String evaluate() {
+
+		int actualTotal = p1Plays + p2Plays;
+		boolean p1Correct = false, p2Correct = false;
+
+		if (p1Guess == actualTotal)
+			p1Correct = true;
+		if (p2Guess == actualTotal)
+			p2Correct = true;
+
+		if (p1Correct == true && p2Correct == true)
+			return "Both players guess correctly!\nNo points are awarded";
+		else if (p1Correct == false && p2Correct == false)
+			return "No one guesses correctly!\nNo points are awarded";
+		else if (p1Correct == true && p2Correct == false) {
+			p1Points += 1;
+			return "Player 1 beats player 2!\nPlayer 1 gets 1 point";
+		}
+		else {
+			p2Points += 1;
+			return "Player 2 beats player 1!\nPlayer 2 gets 1 point";
+		}
 
 	}
 
