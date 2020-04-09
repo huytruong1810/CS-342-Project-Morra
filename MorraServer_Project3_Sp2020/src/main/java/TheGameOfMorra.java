@@ -100,26 +100,38 @@ public class TheGameOfMorra extends Application {
 
 			int portNum = Integer.parseInt(portField.getText());
 
-			listItems.getItems().add("Server listens on port " + portNum + "!\nWaiting for 2 players...");
+			listItems.getItems().add("Server listens on port " + portNum);
 
 			serverConnection = new Server(data -> {
 				Platform.runLater (() -> {
 
-					p1Plays = data.p1Plays;
-					p2Plays = data.p2Plays;
-					p1Guess = data.p1Guess;
-					p2Guess = data.p2Guess;
-					listItems.getItems().add("Player 1 choose : " + p1Plays);
-					listItems.getItems().add("Player 1 guess : " + p1Guess);
-					listItems.getItems().add("Player 2 choose : " + p2Plays);
-					listItems.getItems().add("Player 2 guess : " + p2Guess);
-					listItems.getItems().add(evaluate());
-					if (p1Points == 2) {
-						listItems.getItems().add("Player 1 has 2 points!\nPlayer 1 wins! Game concluded!");
+					numPlayers = data.numPlayers;
+					if (numPlayers == 0)
+						listItems.getItems().add("Waiting for 2 players...");
+					else if (numPlayers == 1)
+						listItems.getItems().add("Player 1 joined!\n Waiting for one more...");
+					else if (numPlayers == 2) {
+
+						listItems.getItems().add("Player 2 joined!\n Game Begins!");
+
+						p1Plays = data.p1Plays;
+						p2Plays = data.p2Plays;
+						p1Guess = data.p1Guess;
+						p2Guess = data.p2Guess;
+						listItems.getItems().add("Player 1 choose : " + p1Plays);
+						listItems.getItems().add("Player 1 guess : " + p1Guess);
+						listItems.getItems().add("Player 2 choose : " + p2Plays);
+						listItems.getItems().add("Player 2 guess : " + p2Guess);
+						listItems.getItems().add(evaluate());
+						if (p1Points == 2) {
+							listItems.getItems().add("Player 1 has 2 points!\nPlayer 1 wins! Game concluded!");
+						} else if (p2Points == 2) {
+							listItems.getItems().add("Player 2 has 2 points!\nPlayer 2 wins! Game concluded!");
+						}
+
 					}
-					else if (p2Points == 2) {
-						listItems.getItems().add("Player 2 has 2 points!\nPlayer 2 wins! Game concluded!");
-					}
+					else
+						listItems.getItems().add("Too many players joined! Server Shut Down!");
 
 				}
 				); }, portNum);
