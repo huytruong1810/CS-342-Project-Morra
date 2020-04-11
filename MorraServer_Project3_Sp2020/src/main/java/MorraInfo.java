@@ -3,11 +3,11 @@ import java.io.Serializable;
 public class MorraInfo implements Serializable {
 
     int p1Points, p2Points;
-    String p1Plays, p2Plays;
-    String p1Guess, p2Guess;
+    int p1Plays, p2Plays;
+    int p1Guess, p2Guess;
     int numPlayers;
 
-    MorraInfo (int p1Points, int p2Points, String p1Plays, String p2Plays, String p1Guess, String p2Guess, int numPlayers) {
+    MorraInfo (int p1Points, int p2Points, int p1Plays, int p2Plays, int p1Guess, int p2Guess, int numPlayers) {
 
         this.p1Points = p1Points;
         this.p2Points = p2Points;
@@ -27,19 +27,19 @@ public class MorraInfo implements Serializable {
         return this.p2Points;
     }
 
-    String getP1Plays() {
+    int getP1Plays() {
         return this.p1Plays;
     }
 
-    String getP2Plays() {
+    int getP2Plays() {
         return this.p2Plays;
     }
 
-    String getP1Guess() {
+    int getP1Guess() {
         return this.p1Guess;
     }
 
-    String getP2Guess() {
+    int getP2Guess() {
         return this.p2Guess;
     }
 

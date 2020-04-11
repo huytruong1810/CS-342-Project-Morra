@@ -11,14 +11,14 @@ import javafx.scene.control.ListView;
 
 public class Server{
 
-    int count = 1;
+    int count = 0;
     ArrayList<ClientThread> clients = new ArrayList<ClientThread>();
     TheServer server;
-    private Consumer<Serializable> callback;
+    private Consumer<MorraInfo> callback;
     int port;
 
 
-    Server(Consumer<Serializable> call, int p){
+    Server(Consumer<MorraInfo> call, int p){
 
         callback = call;
         port = p;
@@ -33,22 +33,20 @@ public class Server{
         public void run() {
 
             try(ServerSocket mysocket = new ServerSocket(port);){
-                System.out.println("Server is waiting for a client!");
-
 
                 while(true) {
 
+                    count += 1;
+
                     ClientThread c = new ClientThread(mysocket.accept(), count);
-                    callback.accept("client has connected to server: " + "client #" + count);
+                    callback.accept(new MorraInfo(0, 0, -1, -1, -1, -1, count));
                     clients.add(c);
                     c.start();
-
-                    count++;
 
                 }
             }//end of try
             catch(Exception e) {
-                callback.accept("Server socket did not launch");
+                callback.accept(new MorraInfo(0, 0, -1, -1, -1, -1, count));
             }
         }//end of while
     }
@@ -92,12 +90,12 @@ public class Server{
             while(true) {
                 try {
                     String data = in.readObject().toString();
-                    callback.accept("client: " + count + " sent: " + data);
+                    callback.accept(new MorraInfo(0, 0, -1, -1, -1, -1, count));
                     updateClients("client #"+count+" said: "+data);
 
                 }
                 catch(Exception e) {
-                    callback.accept("OOOOPPs...Something wrong with the socket from client: " + count + "....closing down!");
+                    callback.accept(new MorraInfo(0, 0, -1, -1, -1, -1, count));
                     updateClients("Client #"+count+" has left the server!");
                     clients.remove(this);
                     break;
