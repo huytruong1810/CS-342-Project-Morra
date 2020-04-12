@@ -30,6 +30,9 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.function.Function;
+import javafx.scene.shape.*;
+import javafx.scene.shape.Rectangle;
+
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -51,9 +54,31 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.Consumer;
 public class TheGameOfMorra extends Application {
 
+	ListView<String> listItems;
+	Client clientConnection; 
+	int p1Points, p2Points;
+	int p1Plays, p2Plays;
+	int p1Guess, p2Guess;
+	int numPlayers;
+	boolean p1; 
+	boolean p2; 
+	MorraInfo MorraClientInstance = new MorraInfo(); 
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
@@ -80,16 +105,20 @@ public class TheGameOfMorra extends Application {
 		Image settings = new Image("settings.png", 25, 25, true, true); 
 		Image end = new Image("end.png", 25, 25, true, true); 
 		Image replay = new Image("replay.png", 25, 25, true, true); 
+		Image zero = new Image("zero.png", 35, 35, true, true); 
+		Image one = new Image("one.png", 35, 35, true, true); 
+		Image two = new Image("two.png", 35, 35, true, true); 
+		Image three = new Image("three.png", 35, 35, true, true); 
+		Image four = new Image("four.png", 35, 35, true, true); 
+		Image five = new Image("five.png", 35, 35, true, true); 
+		Image six = new Image("six.png", 35, 35, true, true); 
+		Image seven = new Image("seven.png", 35, 35, true, true); 
+		Image eight = new Image("eight.png", 35, 35, true, true); 
+		Image nine = new Image("nine.png", 35, 35, true, true); 
+		Image ten = new Image("ten.png", 35, 35, true, true); 
 		
 		/* Buttons */ 
-		Button Connect = new Button("Connect");
-		Connect.setGraphic(new ImageView(connect));
-		Connect.setStyle(
-				"-fx-background-radius: 100em;" +
-                "-fx-min-height: 35px; " +
-                "-fx-max-height: 35px;"
-        );
-		
+		/* Hand Buttons */ 
 		Button ZeroFingers = new Button("");
 		ZeroFingers.setGraphic(new ImageView(zeroFingers));
 		ZeroFingers.setStyle(
@@ -97,7 +126,7 @@ public class TheGameOfMorra extends Application {
 				"-fx-min-width: 60px; " +
                 "-fx-min-height: 60px; " +
                 "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
+                "-fx-max-height: 45px;" +
                 "-fx-base: #e1ef7e;"
         );
 		
@@ -108,7 +137,7 @@ public class TheGameOfMorra extends Application {
 				"-fx-min-width: 60px; " +
                 "-fx-min-height: 60px; " +
                 "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
+                "-fx-max-height: 45px;" +
                 "-fx-base: #e1ef7e;"
         );
 		
@@ -119,7 +148,7 @@ public class TheGameOfMorra extends Application {
 				"-fx-min-width: 60px; " +
                 "-fx-min-height: 60px; " +
                 "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
+                "-fx-max-height: 45px;" +
                 "-fx-base: #e1ef7e;"
         );
 		
@@ -130,7 +159,7 @@ public class TheGameOfMorra extends Application {
 				"-fx-min-width: 60px; " +
                 "-fx-min-height: 60px; " +
                 "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
+                "-fx-max-height: 45px;" +
                 "-fx-base: #e1ef7e;"
         );
 		
@@ -152,74 +181,128 @@ public class TheGameOfMorra extends Application {
 				"-fx-min-width: 60px; " +
                 "-fx-min-height: 60px; " +
                 "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
+                "-fx-max-height: 45px;" +
                 "-fx-base: #e1ef7e;"
         );
 		
-		Button ZeroFingersGuess = new Button("");
-		ZeroFingersGuess.setGraphic(new ImageView(zeroFingers));
-		ZeroFingersGuess.setStyle(
-				"-fx-background-radius: 100em;" +
-				"-fx-min-width: 60px; " +
-                "-fx-min-height: 60px; " +
-                "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
-                "-fx-base: #e1ef7e;"
+		/* Number Buttons */ 
+		Button Zero = new Button("");
+		Zero.setGraphic(new ImageView(zero));
+		Zero.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
         );
 		
-		Button OneFingerGuess = new Button("");
-		OneFingerGuess.setGraphic(new ImageView(oneFinger));
-		OneFingerGuess.setStyle(
-				"-fx-background-radius: 100em;" +
-				"-fx-min-width: 60px; " +
-                "-fx-min-height: 60px; " +
-                "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
-                "-fx-base: #e1ef7e;"
+		Button One = new Button("");
+		One.setGraphic(new ImageView(one));
+		One.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
         );
 		
-		Button TwoFingersGuess = new Button("");
-		TwoFingersGuess.setGraphic(new ImageView(twoFingers));
-		TwoFingersGuess.setStyle(
-				"-fx-background-radius: 100em;" +
-				"-fx-min-width: 60px; " +
-                "-fx-min-height: 60px; " +
-                "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
-                "-fx-base: #e1ef7e;"
+		Button Two = new Button("");
+		Two.setGraphic(new ImageView(two));
+		Two.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
         );
 		
-		Button ThreeFingersGuess = new Button("");
-		ThreeFingersGuess.setGraphic(new ImageView(threeFingers));
-		ThreeFingersGuess.setStyle(
-				"-fx-background-radius: 100em;" +
-				"-fx-min-width: 60px; " +
-                "-fx-min-height: 60px; " +
-                "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
-                "-fx-base: #e1ef7e;"
+		Button Three = new Button("");
+		Three.setGraphic(new ImageView(three));
+		Three.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
         );
 		
-		Button FourFingersGuess = new Button("");
-		FourFingersGuess.setGraphic(new ImageView(fourFingers));
-		FourFingersGuess.setStyle(
-				"-fx-background-radius: 100em;" +
-				"-fx-min-width: 60px; " +
-                "-fx-min-height: 60px; " +
-                "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
-                "-fx-base: #e1ef7e;"
+		Button Four = new Button("");
+		Four.setGraphic(new ImageView(four));
+		Four.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
         );
 		
-		Button FiveFingersGuess = new Button("");
-		FiveFingersGuess.setGraphic(new ImageView(fiveFingers));
-		FiveFingersGuess.setStyle(
+		Button Five = new Button("");
+		Five.setGraphic(new ImageView(five));
+		Five.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
+        );
+		
+		Button Six = new Button("");
+		Six.setGraphic(new ImageView(six));
+		Six.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
+        );
+		
+		Button Seven = new Button("");
+		Seven.setGraphic(new ImageView(seven));
+		Seven.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
+        );
+		
+		Button Eight = new Button("");
+		Eight.setGraphic(new ImageView(eight));
+		Eight.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
+        );
+		
+		Button Nine = new Button("");
+		Nine.setGraphic(new ImageView(nine));
+		Nine.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
+        );
+		
+		Button Ten = new Button("");
+		Ten.setGraphic(new ImageView(ten));
+		Ten.setStyle(
+				"-fx-min-width: 45px; " +
+                "-fx-min-height: 45px; " +
+                "-fx-max-width: 45px; " +
+                "-fx-max-height: 45px;" +
+                "-fx-base: #BBDEFB"
+        );
+		
+		/* Functional Buttons */ 
+		Button Connect = new Button("Connect");
+		Connect.setGraphic(new ImageView(connect));
+		Connect.setStyle(
 				"-fx-background-radius: 100em;" +
-				"-fx-min-width: 60px; " +
-                "-fx-min-height: 60px; " +
-                "-fx-max-width: 60px; " +
-                "-fx-max-height: 60px;" +
-                "-fx-base: #e1ef7e;"
+                "-fx-min-height: 35px; " +
+                "-fx-max-height: 35px;"
         );
 		
 		Button Exit = new Button("");
@@ -310,6 +393,7 @@ public class TheGameOfMorra extends Application {
 		TextField Port = new TextField(); 
 		ConnectionInfo.add(Port, 1, 2);
 		
+		
 		/* Connection Button */
 		HBox Connection = new HBox(10);
 		Connection.setAlignment(Pos.BOTTOM_RIGHT); 
@@ -323,6 +407,9 @@ public class TheGameOfMorra extends Application {
 		
 		
 		
+		
+		
+		
 		/* Scene 2: Game Scene */ 
 		BorderPane GameLayout = new BorderPane();
 		
@@ -333,7 +420,6 @@ public class TheGameOfMorra extends Application {
 		Header.setStyle("-fx-background-color: #00bdaa");
 		Header.setAlignment(Pos.BOTTOM_RIGHT);
 		Header.getChildren().addAll(End, Plus, Settings, Exit, new ImageView(smallLogo));
-		
 		
 		
 		/* Server Messages */ 
@@ -351,11 +437,12 @@ public class TheGameOfMorra extends Application {
 
 		
 		/* Display Opponent Guess */
-		Circle OpponentGuess = new Circle(); 
-		OpponentGuess.setRadius(50);
-		OpponentGuess.setFill(Color.web("#e1ef7e"));
+		Rectangle OpponentGuess = new Rectangle(100, 100, 100, 100); 
+		OpponentGuess.setArcWidth(20); 
+		OpponentGuess.setArcHeight(20); 
+		OpponentGuess.setFill(Color.web("#BBDEFB"));
 		StackPane OpponentGuessStack = new StackPane(); 
-		OpponentGuessStack.getChildren().addAll(OpponentGuess, new ImageView(zeroFingers)); 
+		OpponentGuessStack.getChildren().addAll(OpponentGuess, new ImageView(ten)); 
 		
 		/* Display Opponent Choice */
 		Circle OpponentChoice = new Circle(); 
@@ -381,7 +468,7 @@ public class TheGameOfMorra extends Application {
 		HBox GuessSelection = new HBox(); 
 		GuessSelection.setPadding(new Insets(15, 12, 15, 12));
 		GuessSelection.setSpacing(10);
-		GuessSelection.getChildren().addAll(ZeroFingersGuess, OneFingerGuess, TwoFingersGuess, ThreeFingersGuess, FourFingersGuess, FiveFingersGuess); 
+		GuessSelection.getChildren().addAll(One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten); 
 		
 		Circle YourChoice = new Circle(); 
 		YourChoice.setRadius(50);
@@ -389,17 +476,12 @@ public class TheGameOfMorra extends Application {
 		StackPane YourChoiceStack = new StackPane(); 
 		YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(zeroFingers)); 
 		
-		Circle YourGuess = new Circle(); 
-		YourGuess.setRadius(50);
-		YourGuess.setFill(Color.web("#e1ef7e"));
-		StackPane YourGuessStack = new StackPane(); 
-		YourGuessStack.getChildren().addAll(YourGuess, new ImageView(zeroFingers)); 
-		
 		/* Your Choice Button Selection */ 
 		ZeroFingers.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
 				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(zeroFingers)); 
+				p1Plays = 0; 
 			}
 		});
 		
@@ -407,6 +489,7 @@ public class TheGameOfMorra extends Application {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
 				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(oneFinger)); 
+				p1Plays = 1; 
 			}
 		});
 		
@@ -438,46 +521,89 @@ public class TheGameOfMorra extends Application {
 			}
 		});
 		
+		/* Display Opponent Guess */
+		Rectangle YourGuess = new Rectangle(100, 100, 100, 100); 
+		YourGuess.setArcWidth(20); 
+		YourGuess.setArcHeight(20); 
+		YourGuess.setFill(Color.web("#BBDEFB"));
+		StackPane YourGuessStack = new StackPane(); 
+		YourGuessStack.getChildren().addAll(YourGuess, new ImageView(ten)); 
+		
 		/* Your Guess Button Selection */ 
-		ZeroFingersGuess.setOnAction( new EventHandler<ActionEvent>() {
+		Zero.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(zeroFingers)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(zero)); 
 			}
 		});
 		
-		OneFingerGuess.setOnAction( new EventHandler<ActionEvent>() {
+		One.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(oneFinger)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(one)); 
 			}
 		});
 		
-		TwoFingersGuess.setOnAction( new EventHandler<ActionEvent>() {
+		Two.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(twoFingers)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(two)); 
 			}
 		});
 		
-		ThreeFingersGuess.setOnAction( new EventHandler<ActionEvent>() {
+		Three.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(threeFingers)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(three)); 
 			}
 		});
 		
-		FourFingersGuess.setOnAction( new EventHandler<ActionEvent>() {
+		Four.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(fourFingers)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(four)); 
 			}
 		});
 		
-		FiveFingersGuess.setOnAction( new EventHandler<ActionEvent>() {
+		Five.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(fiveFingers)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(five)); 
+			}
+		});
+		
+		Six.setOnAction( new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				YourGuessStack.getChildren().clear();
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(six)); 
+			}
+		});
+		
+		Seven.setOnAction( new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				YourGuessStack.getChildren().clear();
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(seven)); 
+			}
+		});
+		
+		Eight.setOnAction( new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				YourGuessStack.getChildren().clear();
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(eight)); 
+			}
+		});
+		
+		Nine.setOnAction( new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				YourGuessStack.getChildren().clear();
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(nine)); 
+			}
+		});
+		
+		Ten.setOnAction( new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				YourGuessStack.getChildren().clear();
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(ten)); 
 			}
 		});
 		
@@ -526,6 +652,7 @@ public class TheGameOfMorra extends Application {
 		/* Scene 3: Game Ends */
 		
 		/* End Grid */ 
+		
 		GridPane GameOver = new GridPane(); 
 		GameOver.setAlignment(Pos.BOTTOM_CENTER); 
 		GameOver.setHgap(10); 
@@ -533,6 +660,7 @@ public class TheGameOfMorra extends Application {
 		GameOver.setPadding(new Insets(25, 25, 25, 25)); 
 		
 		/* End Game Text */ 
+		
 		GameOver.setPadding(new Insets(0, 0, 0, 0)); 
         GameOver.add(GameOverTitle, 0, 0, 2, 1); 
         
@@ -566,12 +694,37 @@ public class TheGameOfMorra extends Application {
 		EndLogo.getChildren().add(new ImageView(bigLogo));
 		
 		Scene startScene = new Scene(new VBox(Logo, ConnectionInfo), 300, 275);
-		Scene gameScene = new Scene(new VBox(GameLayout, GameScrollPane), 800, 600);
+		Scene gameScene = new Scene(new VBox(GameLayout, GameScrollPane), 925, 600);
 		Scene endScene = new Scene(new VBox(EndLogo, GameOver), 400, 300);
-		Connect.setOnAction(e -> primaryStage.setScene(gameScene));
+		
+		Connect.setOnAction(e -> {
+			clientConnection = new Client ( data -> {
+				Platform.runLater(() -> {
+					primaryStage.setScene(gameScene);
+					MessageBoard.getItems().add(data.toString());
+				});
+			}, IP.getText(), Integer.parseInt(Port.getText()));
+		});
+		
 		End.setOnAction(e-> primaryStage.setScene(endScene));
+
 		primaryStage.setScene(startScene);
 		primaryStage.show();
 	}
 
 }
+
+
+/* 
+		
+		clientConnection = new Client(data -> {
+			Platform.runLater (() -> {
+					
+				}
+				else
+					listItems.getItems().add("Too many players joined! Server Shut Down!");
+
+			}
+			); }, IP.getText(), Integer.parseInt(Port.getText()));
+
+*/ 
