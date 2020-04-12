@@ -3,55 +3,66 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import javafx.application.Platform;
 import javafx.scene.control.ListView;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class Server{
-
-    int count = 0;
-    ArrayList<ClientThread> clients = new ArrayList<ClientThread>();
-    TheServer server;
-    private Consumer<MorraInfo> callback;
+public class Client{
+	
+    String ip ; 
     int port;
+    Socket socketClient;
+	
+	ObjectOutputStream out;
+	ObjectInputStream in;
+    
+	private Consumer<Serializable> callback;
+	
+	Client(Consumer<Serializable> call, String ip, int port){
+		callback = call;
+		this.port = port; 
+		this.ip = ip;
+	}
 
+	public void run() {
+		try {
+			socketClient = new Socket(ip, port);
+		    out = new ObjectOutputStream(socketClient.getOutputStream());
+		    in = new ObjectInputStream(socketClient.getInputStream());
+		    socketClient.setTcpNoDelay(true);
+			}
+			catch(Exception e) {}
+			
+			while(true) {
+				try {
+					String message = in.readObject().toString();
+					callback.accept(message);
+				}
+				catch(Exception e) {}
+			}
+		} /* end run() */ 
+	
+	public void send(String data) {
+		try {
+			out.writeObject(data); 
+		} catch (IOException e) {
+			e.printStackTrace(); 
+		}
+	}
+}  
 
-    Server(Consumer<MorraInfo> call, int p){
-
-        callback = call;
-        port = p;
-        server = new TheServer();
-        server.start();
-
-    }
-
-
-    public class TheServer extends Thread{
-
-        public void run() {
-
-            try(ServerSocket mysocket = new ServerSocket(port);){
-
-                while(true) {
-
-                    count += 1;
-
-                    ClientThread c = new ClientThread(mysocket.accept(), count);
-                    callback.accept(new MorraInfo(0, 0, -1, -1, -1, -1, count));
-                    clients.add(c);
-                    c.start();
-
-                }
-            }//end of try
-            catch(Exception e) {
-                callback.accept(new MorraInfo(0, 0, -1, -1, -1, -1, count));
-            }
-        }//end of while
-    }
-
-
+/*
     class ClientThread extends Thread {
 
         Socket connection;
@@ -105,4 +116,5 @@ public class Server{
 
 
     }//end of client thread
-}
+    */
+    
