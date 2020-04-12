@@ -54,9 +54,31 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.Consumer;
 public class TheGameOfMorra extends Application {
 
+	ListView<String> listItems;
+	Client clientConnection; 
+	int p1Points, p2Points;
+	int p1Plays, p2Plays;
+	int p1Guess, p2Guess;
+	int numPlayers;
+	boolean p1; 
+	boolean p2; 
+	MorraInfo MorraClientInstance = new MorraInfo(); 
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
@@ -371,6 +393,7 @@ public class TheGameOfMorra extends Application {
 		TextField Port = new TextField(); 
 		ConnectionInfo.add(Port, 1, 2);
 		
+		
 		/* Connection Button */
 		HBox Connection = new HBox(10);
 		Connection.setAlignment(Pos.BOTTOM_RIGHT); 
@@ -384,6 +407,9 @@ public class TheGameOfMorra extends Application {
 		
 		
 		
+		
+		
+		
 		/* Scene 2: Game Scene */ 
 		BorderPane GameLayout = new BorderPane();
 		
@@ -394,7 +420,6 @@ public class TheGameOfMorra extends Application {
 		Header.setStyle("-fx-background-color: #00bdaa");
 		Header.setAlignment(Pos.BOTTOM_RIGHT);
 		Header.getChildren().addAll(End, Plus, Settings, Exit, new ImageView(smallLogo));
-		
 		
 		
 		/* Server Messages */ 
@@ -456,6 +481,7 @@ public class TheGameOfMorra extends Application {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
 				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(zeroFingers)); 
+				p1Plays = 0; 
 			}
 		});
 		
@@ -463,6 +489,7 @@ public class TheGameOfMorra extends Application {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
 				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(oneFinger)); 
+				p1Plays = 1; 
 			}
 		});
 		
@@ -669,10 +696,35 @@ public class TheGameOfMorra extends Application {
 		Scene startScene = new Scene(new VBox(Logo, ConnectionInfo), 300, 275);
 		Scene gameScene = new Scene(new VBox(GameLayout, GameScrollPane), 925, 600);
 		Scene endScene = new Scene(new VBox(EndLogo, GameOver), 400, 300);
-		Connect.setOnAction(e -> primaryStage.setScene(gameScene));
+		
+		Connect.setOnAction(e -> {
+			clientConnection = new Client ( data -> {
+				Platform.runLater(() -> {
+					primaryStage.setScene(gameScene);
+					MessageBoard.getItems().add(data.toString());
+				});
+			}, IP.getText(), Integer.parseInt(Port.getText()));
+		});
+		
 		End.setOnAction(e-> primaryStage.setScene(endScene));
+
 		primaryStage.setScene(startScene);
 		primaryStage.show();
 	}
 
 }
+
+
+/* 
+		
+		clientConnection = new Client(data -> {
+			Platform.runLater (() -> {
+					
+				}
+				else
+					listItems.getItems().add("Too many players joined! Server Shut Down!");
+
+			}
+			); }, IP.getText(), Integer.parseInt(Port.getText()));
+
+*/ 
