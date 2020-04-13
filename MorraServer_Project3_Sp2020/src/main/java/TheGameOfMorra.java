@@ -105,6 +105,7 @@ public class TheGameOfMorra extends Application {
 				Platform.runLater (() -> {
 
 					int gameMode = data.gameMode;
+					System.out.println(gameMode);
 					if (gameMode == -999)
 						listItems.getItems().add("OOPs...One player has connection error!");
 					else if (gameMode == 0)

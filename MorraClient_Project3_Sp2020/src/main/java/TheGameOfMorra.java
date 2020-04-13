@@ -71,7 +71,7 @@ public class TheGameOfMorra extends Application {
 
 	ListView<String> listItems;
 	Client clientConnection; 
-	int p1Points, p2Points;
+	int p1Points = 0, p2Points = 0;
 	int p1Plays = 0, p2Plays = 0;
 	int p1Guess = 10, p2Guess = 10;
 	boolean p1 = false, p2 = false;
@@ -762,6 +762,7 @@ public class TheGameOfMorra extends Application {
 				Platform.runLater(() -> {
 
 					int gameMode = data.gameMode;
+					System.out.println(gameMode);
 					primaryStage.setScene(gameScene);
 
 					if (gameMode == -999)

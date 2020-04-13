@@ -78,19 +78,33 @@ public class Server{
 
         public void updateClients(MorraInfo data) {
 
-            ClientThread t1 = clients.get(0);
-            try {
-                data.setP1(true);
-                data.setP2(false);
-                t1.out.writeObject(data);
-            } catch(Exception e) {}
+            if (clients.size() == 1) {
 
-            ClientThread t2 = clients.get(1);
-            try {
-                data.setP1(false);
-                data.setP2(true);
-                t2.out.writeObject(data);
-            } catch(Exception e) {}
+                ClientThread t1 = clients.get(0);
+                try {
+                    data.setP1(true);
+                    data.setP2(false);
+                    t1.out.writeObject(data);
+                } catch (Exception e) {}
+
+            }
+            else if (clients.size() == 2) {
+
+                ClientThread t1 = clients.get(0);
+                try {
+                    data.setP1(true);
+                    data.setP2(false);
+                    t1.out.writeObject(data);
+                } catch (Exception e) {
+                }
+                ClientThread t2 = clients.get(1);
+                try {
+                    data.setP1(false);
+                    data.setP2(true);
+                    t2.out.writeObject(data);
+                } catch (Exception e) {}
+
+            }
 
         }
 
