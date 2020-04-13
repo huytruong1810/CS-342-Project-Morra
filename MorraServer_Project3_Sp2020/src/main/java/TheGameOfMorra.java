@@ -25,7 +25,6 @@ public class TheGameOfMorra extends Application {
 	int p1Points, p2Points;
 	int p1Plays, p2Plays;
 	int p1Guess, p2Guess;
-	int numPlayers;
 
 	public static void main(String[] args) {
 
@@ -100,24 +99,27 @@ public class TheGameOfMorra extends Application {
 
 			int portNum = Integer.parseInt(portField.getText());
 
-			listItems.getItems().add("Server listens on port " + portNum);
+			listItems.getItems().add("Server listens on port " + portNum + "\nWaiting for 2 players...");
 
 			serverConnection = new Server(data -> {
 				Platform.runLater (() -> {
 
-					numPlayers = data.numPlayers;
-					if (numPlayers == 0)
-						listItems.getItems().add("Waiting for 2 players...");
-					else if (numPlayers == 1)
-						listItems.getItems().add("Player 1 joined!\n Waiting for one more...");
-					else if (numPlayers == 2) {
-
-						listItems.getItems().add("Player 2 joined!\n Game Begins!");
+					int gameMode = data.gameMode;
+					if (gameMode == -999)
+						listItems.getItems().add("OOPs...One player has connection error!");
+					else if (gameMode == 0)
+						listItems.getItems().add("Player 1 joined!\nWaiting for one more...");
+					else if (gameMode == 1)
+						listItems.getItems().add("Player 2 joined!\nGame Begins!");
+					else if (gameMode == 2) {
 
 						p1Plays = data.p1Plays;
 						p2Plays = data.p2Plays;
 						p1Guess = data.p1Guess;
 						p2Guess = data.p2Guess;
+						p1PointField.setText(Integer.toString(data.p1Points));
+						p2PointField.setText(Integer.toString(data.p2Points));
+						listItems.getItems().add("Both players has chosen!");
 						listItems.getItems().add("Player 1 choose : " + p1Plays);
 						listItems.getItems().add("Player 1 guess : " + p1Guess);
 						listItems.getItems().add("Player 2 choose : " + p2Plays);
@@ -130,11 +132,8 @@ public class TheGameOfMorra extends Application {
 						}
 
 					}
-					else
-						listItems.getItems().add("Too many players joined! Server Shut Down!");
 
-				}
-				); }, portNum);
+				}); }, portNum);
 
 			HBox layoutBox = new HBox(20, smallLogo, listItems, new VBox(50, p1Area, p2Area));
 			layoutBox.setPadding(new Insets(10));

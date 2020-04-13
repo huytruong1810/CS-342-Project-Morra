@@ -74,10 +74,7 @@ public class TheGameOfMorra extends Application {
 	int p1Points, p2Points;
 	int p1Plays, p2Plays;
 	int p1Guess, p2Guess;
-	int numPlayers;
-	boolean p1; 
-	boolean p2; 
-	MorraInfo MorraClientInstance = new MorraInfo(); 
+	boolean p1, p2;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -102,7 +99,7 @@ public class TheGameOfMorra extends Application {
 		Image fiveFingers = new Image("five-fingers.png", 50, 50, true, true); 
 		Image exit = new Image("exit.png", 25, 25, true, true); 
 		Image plus = new Image("plus.png", 25, 25, true, true); 
-		Image settings = new Image("settings.png", 25, 25, true, true); 
+		Image submit = new Image("settings.png", 25, 25, true, true);
 		Image end = new Image("end.png", 25, 25, true, true); 
 		Image replay = new Image("replay.png", 25, 25, true, true); 
 		Image zero = new Image("zero.png", 35, 35, true, true); 
@@ -325,9 +322,9 @@ public class TheGameOfMorra extends Application {
                 "-fx-max-height: 35px;"
         );
 		
-		Button Settings = new Button("");
-		Settings.setGraphic(new ImageView(settings));
-		Settings.setStyle(
+		Button Submit = new Button("");
+		Submit.setGraphic(new ImageView(submit));
+		Submit.setStyle(
 				"-fx-background-radius: 100em;" +
 				"-fx-min-width: 35px; " +
                 "-fx-min-height: 35px; " +
@@ -404,11 +401,7 @@ public class TheGameOfMorra extends Application {
 		Logo.setAlignment(Pos.BASELINE_CENTER);
 		Logo.setPadding(new Insets(5, 0, 0, 0));
 		Logo.getChildren().add(new ImageView(bigLogo));
-		
-		
-		
-		
-		
+
 		
 		/* Scene 2: Game Scene */ 
 		BorderPane GameLayout = new BorderPane();
@@ -419,7 +412,7 @@ public class TheGameOfMorra extends Application {
 		Header.setSpacing(10);
 		Header.setStyle("-fx-background-color: #00bdaa");
 		Header.setAlignment(Pos.BOTTOM_RIGHT);
-		Header.getChildren().addAll(End, Plus, Settings, Exit, new ImageView(smallLogo));
+		Header.getChildren().addAll(End, Plus, Submit, Exit, new ImageView(smallLogo));
 		
 		
 		/* Server Messages */ 
@@ -698,12 +691,63 @@ public class TheGameOfMorra extends Application {
 		Scene endScene = new Scene(new VBox(EndLogo, GameOver), 400, 300);
 		
 		Connect.setOnAction(e -> {
+
 			clientConnection = new Client ( data -> {
 				Platform.runLater(() -> {
+
 					primaryStage.setScene(gameScene);
-					MessageBoard.getItems().add(data.toString());
-				});
-			}, IP.getText(), Integer.parseInt(Port.getText()));
+					p1 = data.p1;
+					p2 = data.p2;
+					p1Plays = data.p1Plays;
+					p2Plays = data.p2Plays;
+					p1Guess = data.p1Guess;
+					p2Guess = data.p2Guess;
+					p1Points = data.p1Points;
+					p2Points = data.p2Points;
+					int gameMode = data.gameMode;
+					if (p1 == true) {
+
+						if (gameMode == -999)
+							listItems.getItems().add("Player 2's connection has dropped!");
+						else if (gameMode == 2) {
+
+							listItems.getItems().add("I am player 1!");
+							listItems.getItems().add("Player 2 plays " + p2Plays);
+							listItems.getItems().add("Player 2 guess " + p2Guess);
+
+						}
+
+					}
+					else {
+
+						if (gameMode == -999)
+							listItems.getItems().add("Player 1's connection has dropped!");
+						else if (gameMode == 2) {
+
+							listItems.getItems().add("I am player 2!");
+							listItems.getItems().add("Player 1 plays " + p1Plays);
+							listItems.getItems().add("Player 1 guess " + p1Guess);
+
+						}
+
+					}
+
+					listItems.getItems().add("Score Summary:");
+					listItems.getItems().add("Player 1 : " + p1Points);
+					listItems.getItems().add("Player 2 : " + p2Points);
+
+				}); }, IP.getText(), Integer.parseInt(Port.getText()));
+
+			clientConnection.start();
+
+
+		});
+
+		Submit.setOnAction(e -> {
+
+			clientConnection.send(new MorraInfo(2, p1Points, p2Points, p1Plays, p2Plays, p1Guess, p2Guess, p1, p2));
+			listItems.getItems().add("Submit successfully!");
+
 		});
 		
 		End.setOnAction(e-> primaryStage.setScene(endScene));
@@ -713,18 +757,3 @@ public class TheGameOfMorra extends Application {
 	}
 
 }
-
-
-/* 
-		
-		clientConnection = new Client(data -> {
-			Platform.runLater (() -> {
-					
-				}
-				else
-					listItems.getItems().add("Too many players joined! Server Shut Down!");
-
-			}
-			); }, IP.getText(), Integer.parseInt(Port.getText()));
-
-*/ 

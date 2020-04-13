@@ -18,7 +18,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Client{
+public class Client extends Thread {
 	
     String ip ; 
     int port;
@@ -27,9 +27,9 @@ public class Client{
 	ObjectOutputStream out;
 	ObjectInputStream in;
     
-	private Consumer<Serializable> callback;
+	private Consumer<MorraInfo> callback;
 	
-	Client(Consumer<Serializable> call, String ip, int port){
+	Client(Consumer<MorraInfo> call, String ip, int port){
 		callback = call;
 		this.port = port; 
 		this.ip = ip;
@@ -46,75 +46,19 @@ public class Client{
 			
 			while(true) {
 				try {
-					String message = in.readObject().toString();
+					MorraInfo message = (MorraInfo)in.readObject();
 					callback.accept(message);
 				}
 				catch(Exception e) {}
 			}
 		} /* end run() */ 
 	
-	public void send(String data) {
+	public void send (MorraInfo data) {
 		try {
 			out.writeObject(data); 
 		} catch (IOException e) {
 			e.printStackTrace(); 
 		}
 	}
-}  
-
-/*
-    class ClientThread extends Thread {
-
-        Socket connection;
-        int count;
-        ObjectInputStream in;
-        ObjectOutputStream out;
-
-        ClientThread(Socket s, int count){
-            this.connection = s;
-            this.count = count;
-        }
-
-        public void updateClients(String message) {
-            for(int i = 0; i < clients.size(); i++) {
-                ClientThread t = clients.get(i);
-                try {
-                    t.out.writeObject(message);
-                }
-                catch(Exception e) {}
-            }
-        }
-
-        public void run(){
-
-            try {
-                in = new ObjectInputStream(connection.getInputStream());
-                out = new ObjectOutputStream(connection.getOutputStream());
-                connection.setTcpNoDelay(true);
-            }
-            catch(Exception e) {
-                System.out.println("Streams not open");
-            }
-
-            updateClients("new client on server: client #"+count);
-
-            while(true) {
-                try {
-                    String data = in.readObject().toString();
-                    callback.accept(new MorraInfo(0, 0, -1, -1, -1, -1, count));
-                    updateClients("client #"+count+" said: "+data);
-
-                }
-                catch(Exception e) {
-                    callback.accept(new MorraInfo(0, 0, -1, -1, -1, -1, count));
-                    updateClients("Client #"+count+" has left the server!");
-                    clients.remove(this);
-                    break;
-                }
-            }
-        }//end of run
-
-
-    }//end of client thread
-    */
+}
     

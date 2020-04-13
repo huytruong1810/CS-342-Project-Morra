@@ -26,7 +26,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/research/MyWumpusWorld" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/GUIServerExample" />
     <property name="restartRequiresConfirmation" value="false" />
   </component>
   <component name="RunManager">
@@ -61,26 +61,26 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1586415502990" />
-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1586445461586">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1586719672437">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1586445461586" />
-    <state width="1493" height="2" key="GridCell.Tab.0.bottom" timestamp="1586417683632">
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1586719672437" />
+    <state width="1493" height="2" key="GridCell.Tab.0.bottom" timestamp="1586725547288">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="2" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1586417683632" />
-    <state width="1493" height="2" key="GridCell.Tab.0.center" timestamp="1586417683632">
+    <state width="1493" height="2" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1586725547288" />
+    <state width="1493" height="2" key="GridCell.Tab.0.center" timestamp="1586725547288">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="2" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1586417683632" />
-    <state width="1493" height="2" key="GridCell.Tab.0.left" timestamp="1586417683632">
+    <state width="1493" height="2" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1586725547288" />
+    <state width="1493" height="2" key="GridCell.Tab.0.left" timestamp="1586725547288">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="2" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1586417683632" />
-    <state width="1493" height="2" key="GridCell.Tab.0.right" timestamp="1586417683632">
+    <state width="1493" height="2" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1586725547288" />
+    <state width="1493" height="2" key="GridCell.Tab.0.right" timestamp="1586725547288">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1493" height="2" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1586417683632" />
+    <state width="1493" height="2" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1586725547288" />
     <state x="465" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1586445440838">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
