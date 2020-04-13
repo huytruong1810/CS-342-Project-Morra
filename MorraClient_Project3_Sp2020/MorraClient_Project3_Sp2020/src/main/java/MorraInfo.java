@@ -2,12 +2,12 @@ import java.io.Serializable;
 
 public class MorraInfo implements Serializable {
 
-    int p1Points, p2Points;
-    int p1Plays, p2Plays;
-    int p1Guess, p2Guess;
-    int gameMode;
-    boolean p1;
-    boolean p2;
+    public int p1Points, p2Points;
+    public int p1Plays, p2Plays;
+    public int p1Guess, p2Guess;
+    public int gameMode;
+    public boolean p1;
+    public boolean p2;
 
     MorraInfo (int gameMode, int p1Points, int p2Points, int p1Plays, int p2Plays, int p1Guess, int p2Guess, boolean p1, boolean p2) {
 
