@@ -96,8 +96,6 @@ public class Server{
 
         public void run(){
 
-            numReceived = 0;
-
             try {
 
                 in = new ObjectInputStream(connection.getInputStream());
@@ -109,34 +107,39 @@ public class Server{
                 System.out.println("Streams not open");
             }
 
-            // game mode being 2 meaning the server is telling the first client that another client has joined and the game has begun
+            // game mode being 2 meaning the server is determining which each client are, p1 or p2
             updateClients(new MorraInfo(2, -1, -1, -1, -1, -1, -1, false, false));
+
+            numReceived = 0;
 
             while(true) {
                 try {
 
                     MorraInfo data = (MorraInfo)in.readObject();
-                    numReceived += 1;
+                    // if game mode of the in stream is 3, that means the client just sent something to the server
+                    if (data.gameMode == 3) {
 
-                    if (data.p1 == true) {
-                        p1Plays = data.p1Plays;
-                        p1Guess = data.p1Guess;
-                        p1Points = data.p1Points;
-                    }
-                    else {
-                        p2Plays = data.p2Plays;
-                        p2Guess = data.p2Guess;
-                        p2Points = data.p2Points;
-                    }
+                        numReceived += 1;
 
-                    if (numReceived == 2) {
+                        if (data.p1 == true) {
+                            p1Plays = data.p1Plays;
+                            p1Guess = data.p1Guess;
+                            p1Points = data.p1Points;
+                        } else {
+                            p2Plays = data.p2Plays;
+                            p2Guess = data.p2Guess;
+                            p2Points = data.p2Points;
+                        }
 
-                        evaluate();
+                        if (numReceived == 2) {
 
-                        // game mode being 2 meaning evaluation is done and ready for displaying and updating clients
-                        MorraInfo result = new MorraInfo(2, p1Points, p2Points, p1Plays, p2Plays, p1Guess, p2Guess, false, false);
-                        callback.accept(result);
-                        updateClients(result);
+                            evaluate();
+                            // game mode being 3 on server side meaning server has the final result and is pushing it to GUI
+                            callback.accept(new MorraInfo(3, p1Points, p2Points, p1Plays, p2Plays, p1Guess, p2Guess, false, false));
+                            // game mode being 3 on client side meaning server is sending the final result to clients
+                            updateClients(new MorraInfo(3, p1Points, p2Points, p1Plays, p2Plays, p1Guess, p2Guess, false, false));
+
+                        }
 
                     }
 

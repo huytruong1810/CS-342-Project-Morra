@@ -72,9 +72,9 @@ public class TheGameOfMorra extends Application {
 	ListView<String> listItems;
 	Client clientConnection; 
 	int p1Points, p2Points;
-	int p1Plays, p2Plays;
-	int p1Guess, p2Guess;
-	boolean p1, p2;
+	int p1Plays = 0, p2Plays = 0;
+	int p1Guess = 10, p2Guess = 10;
+	boolean p1 = false, p2 = false;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -474,43 +474,65 @@ public class TheGameOfMorra extends Application {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
 				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(zeroFingers)); 
-				p1Plays = 0; 
+				if (p1)
+					p1Plays = 0;
+				else
+					p2Plays = 0;
 			}
 		});
 		
 		OneFinger.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
-				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(oneFinger)); 
-				p1Plays = 1; 
+				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(oneFinger));
+				if (p1)
+					p1Plays = 1;
+				else
+					p2Plays = 1;
 			}
 		});
 		
 		TwoFingers.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
-				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(twoFingers)); 
+				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(twoFingers));
+				if (p1)
+					p1Plays = 2;
+				else
+					p2Plays = 2;
 			}
 		});
 		
 		ThreeFingers.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
-				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(threeFingers)); 
+				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(threeFingers));
+				if (p1)
+					p1Plays = 3;
+				else
+					p2Plays = 3;
 			}
 		});
 		
 		FourFingers.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
-				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(fourFingers)); 
+				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(fourFingers));
+				if (p1)
+					p1Plays = 4;
+				else
+					p2Plays = 4;
 			}
 		});
 		
 		FiveFingers.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourChoiceStack.getChildren().clear();
-				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(fiveFingers)); 
+				YourChoiceStack.getChildren().addAll(YourChoice, new ImageView(fiveFingers));
+				if (p1)
+					p1Plays = 5;
+				else
+					p2Plays = 5;
 			}
 		});
 		
@@ -526,77 +548,121 @@ public class TheGameOfMorra extends Application {
 		Zero.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(zero)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(zero));
+				if (p1)
+					p1Guess = 0;
+				else
+					p2Guess = 0;
 			}
 		});
 		
 		One.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(one)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(one));
+				if (p1)
+					p1Guess = 1;
+				else
+					p2Guess = 1;
 			}
 		});
 		
 		Two.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(two)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(two));
+				if (p1)
+					p1Guess = 2;
+				else
+					p2Guess = 2;
 			}
 		});
 		
 		Three.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(three)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(three));
+				if (p1)
+					p1Guess = 3;
+				else
+					p2Guess = 3;
 			}
 		});
 		
 		Four.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(four)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(four));
+				if (p1)
+					p1Guess = 4;
+				else
+					p2Guess = 4;
 			}
 		});
 		
 		Five.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(five)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(five));
+				if (p1)
+					p1Guess = 5;
+				else
+					p2Guess = 5;
 			}
 		});
 		
 		Six.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(six)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(six));
+				if (p1)
+					p1Guess = 6;
+				else
+					p2Guess = 6;
 			}
 		});
 		
 		Seven.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(seven)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(seven));
+				if (p1)
+					p1Guess = 7;
+				else
+					p2Guess = 7;
 			}
 		});
 		
 		Eight.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(eight)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(eight));
+				if (p1)
+					p1Guess = 8;
+				else
+					p2Guess = 8;
 			}
 		});
 		
 		Nine.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(nine)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(nine));
+				if (p1)
+					p1Guess = 9;
+				else
+					p2Guess = 9;
 			}
 		});
 		
 		Ten.setOnAction( new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				YourGuessStack.getChildren().clear();
-				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(ten)); 
+				YourGuessStack.getChildren().addAll(YourGuess, new ImageView(ten));
+				if (p1)
+					p1Guess = 10;
+				else
+					p2Guess = 10;
 			}
 		});
 		
@@ -695,46 +761,36 @@ public class TheGameOfMorra extends Application {
 			clientConnection = new Client ( data -> {
 				Platform.runLater(() -> {
 
-					primaryStage.setScene(gameScene);
-					p1 = data.p1;
-					p2 = data.p2;
-					p1Plays = data.p1Plays;
-					p2Plays = data.p2Plays;
-					p1Guess = data.p1Guess;
-					p2Guess = data.p2Guess;
-					p1Points = data.p1Points;
-					p2Points = data.p2Points;
 					int gameMode = data.gameMode;
-					if (p1 == true) {
+					primaryStage.setScene(gameScene);
 
-						if (gameMode == -999)
-							listItems.getItems().add("Player 2's connection has dropped!");
-						else if (gameMode == 2) {
+					if (gameMode == -999)
+						listItems.getItems().add("The other client's connection has dropped!");
+					// game mode of 2 from the in stream meaning its player classification time
+					else if (gameMode == 2) {
+						p1 = data.p1;
+						p2 = data.p2;
+					}
+					// game mode of 3 from the in stream meaning its player judging time
+					else if (gameMode == 3) {
+						if (p1 == true) {
 
 							listItems.getItems().add("I am player 1!");
-							listItems.getItems().add("Player 2 plays " + p2Plays);
-							listItems.getItems().add("Player 2 guess " + p2Guess);
+							listItems.getItems().add("Player 2 plays " + data.p2Plays);
+							listItems.getItems().add("Player 2 guess " + data.p2Guess);
 
 						}
-
-					}
-					else {
-
-						if (gameMode == -999)
-							listItems.getItems().add("Player 1's connection has dropped!");
-						else if (gameMode == 2) {
+						else if (p2 == true) {
 
 							listItems.getItems().add("I am player 2!");
-							listItems.getItems().add("Player 1 plays " + p1Plays);
-							listItems.getItems().add("Player 1 guess " + p1Guess);
+							listItems.getItems().add("Player 1 plays " + data.p1Plays);
+							listItems.getItems().add("Player 1 guess " + data.p2Guess);
 
 						}
-
+						listItems.getItems().add("Score Summary:");
+						listItems.getItems().add("Player 1 : " + data.p1Points);
+						listItems.getItems().add("Player 2 : " + data.p2Points);
 					}
-
-					listItems.getItems().add("Score Summary:");
-					listItems.getItems().add("Player 1 : " + p1Points);
-					listItems.getItems().add("Player 2 : " + p2Points);
 
 				}); }, IP.getText(), Integer.parseInt(Port.getText()));
 
@@ -745,7 +801,8 @@ public class TheGameOfMorra extends Application {
 
 		Submit.setOnAction(e -> {
 
-			clientConnection.send(new MorraInfo(2, p1Points, p2Points, p1Plays, p2Plays, p1Guess, p2Guess, p1, p2));
+			// game mode being 3 on client side meaning the client is sending this information to the server
+			clientConnection.send(new MorraInfo(3, p1Points, p2Points, p1Plays, p2Plays, p1Guess, p2Guess, p1, p2));
 			listItems.getItems().add("Submit successfully!");
 
 		});

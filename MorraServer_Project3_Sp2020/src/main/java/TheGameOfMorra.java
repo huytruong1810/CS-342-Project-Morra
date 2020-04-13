@@ -111,7 +111,7 @@ public class TheGameOfMorra extends Application {
 						listItems.getItems().add("Player 1 joined!\nWaiting for one more...");
 					else if (gameMode == 1)
 						listItems.getItems().add("Player 2 joined!\nGame Begins!");
-					else if (gameMode == 2) {
+					else if (gameMode == 3) {
 
 						p1Plays = data.p1Plays;
 						p2Plays = data.p2Plays;
