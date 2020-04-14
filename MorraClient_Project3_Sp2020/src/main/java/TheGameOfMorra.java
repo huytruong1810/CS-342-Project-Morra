@@ -99,7 +99,7 @@ public class TheGameOfMorra extends Application {
 		Image fiveFingers = new Image("five-fingers.png", 50, 50, true, true); 
 		Image exit = new Image("exit.png", 25, 25, true, true); 
 		Image plus = new Image("plus.png", 25, 25, true, true); 
-		Image submit = new Image("settings.png", 25, 25, true, true);
+		Image submit = new Image("submit.png", 25, 25, true, true);
 		Image end = new Image("end.png", 25, 25, true, true); 
 		Image replay = new Image("replay.png", 25, 25, true, true); 
 		Image zero = new Image("zero.png", 35, 35, true, true); 
@@ -322,13 +322,11 @@ public class TheGameOfMorra extends Application {
                 "-fx-max-height: 35px;"
         );
 		
-		Button Submit = new Button("");
+		Button Submit = new Button("Submit");
 		Submit.setGraphic(new ImageView(submit));
 		Submit.setStyle(
 				"-fx-background-radius: 100em;" +
-				"-fx-min-width: 35px; " +
                 "-fx-min-height: 35px; " +
-                "-fx-max-width: 35px; " +
                 "-fx-max-height: 35px;"
         );
 		
@@ -766,7 +764,7 @@ public class TheGameOfMorra extends Application {
 					primaryStage.setScene(gameScene);
 
 					if (gameMode == -999)
-						listItems.getItems().add("The other client's connection has dropped!");
+						MessageBoard.getItems().add("The other client's connection has dropped!");
 					// game mode of 2 from the in stream meaning its player classification time
 					else if (gameMode == 2) {
 						p1 = data.p1;
@@ -776,21 +774,21 @@ public class TheGameOfMorra extends Application {
 					else if (gameMode == 3) {
 						if (p1 == true) {
 
-							listItems.getItems().add("I am player 1!");
-							listItems.getItems().add("Player 2 plays " + data.p2Plays);
-							listItems.getItems().add("Player 2 guess " + data.p2Guess);
+							MessageBoard.getItems().add("I am player 1!");
+							MessageBoard.getItems().add("Player 2 plays " + data.p2Plays);
+							MessageBoard.getItems().add("Player 2 guess " + data.p2Guess);
 
 						}
 						else if (p2 == true) {
 
-							listItems.getItems().add("I am player 2!");
-							listItems.getItems().add("Player 1 plays " + data.p1Plays);
-							listItems.getItems().add("Player 1 guess " + data.p2Guess);
+							MessageBoard.getItems().add("I am player 2!");
+							MessageBoard.getItems().add("Player 1 plays " + data.p1Plays);
+							MessageBoard.getItems().add("Player 1 guess " + data.p2Guess);
 
 						}
-						listItems.getItems().add("Score Summary:");
-						listItems.getItems().add("Player 1 : " + data.p1Points);
-						listItems.getItems().add("Player 2 : " + data.p2Points);
+						GameScore.getItems().add("Score Summary:");
+						GameScore.getItems().add("Player 1 : " + data.p1Points);
+						GameScore.getItems().add("Player 2 : " + data.p2Points);
 					}
 
 				}); }, IP.getText(), Integer.parseInt(Port.getText()));
